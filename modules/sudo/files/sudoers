@@ -1,0 +1,5 @@
+
+root    ALL = (ALL) ALL
+user1   ALL = (ALL) NOPASSWD:ALL
+redhat  ALL = (ALL) NOPASSWD:/bin/ls
+

@@ -1,43 +1,51 @@
 
 ## site.pp ##
 
-# This file (/etc/puppetlabs/puppet/manifests/site.pp) is the main entry point
-# used when an agent connects to a master and asks for an updated configuration.
-#
-# Global objects like filebuckets and resource defaults should go in this file,
-# as should the default node definition. (The default node can be omitted
-# if you use the console and don't define any other nodes in site.pp. See
-# http://docs.puppetlabs.com/guides/language_guide.html#nodes for more on
-# node definitions.)
-
-## Active Configurations ##
-
-# PRIMARY FILEBUCKET
-# This configures puppet agent and puppet inspect to back up file contents when
-# they run. The Puppet Enterprise console needs this to display file contents
-# and differences.
-
-# Define filebucket 'main':
-filebucket { 'main':
-  server => 'puppetmaster.virtual.vm',
-  path   => false,
-}
-
-# Make filebucket 'main' the default backup location for all File resources:
-File { backup => 'main' }
-
-# DEFAULT NODE
-# Node definitions in this file are merged with node data from the console. See
-# http://docs.puppetlabs.com/guides/language_guide.html#nodes for more on
-# node definitions.
-
-# The default node definition matches any node lacking a more specific node
-# definition. If there are no other nodes in this file, classes declared here
-# will be included in every node's catalog, *in addition* to any classes
-# specified in the console for that node.
-
 node default {
-  # This is where you can declare classes for all nodes.
-  # Example:
   #   class { 'my_class': }
+    include ssh
+    include sudo
+
+    group{'group1':
+        ensure => present,
+        gid => '550',
+       }
+
+    group{'group2':
+        ensure => present,
+        gid => '552',
+       }
+
+    user {'redhat':
+        ensure => present,
+        gid => '552',
+        uid => '552',
+        comment => 'Puppet Redhat',
+        home    => '/home/redhat/',
+        shell   =>  '/bin/bash',
+        managehome => true,
+    }
+
+    user {'user1':
+        ensure => present,
+        gid => '550',
+        uid => '550',
+        comment => 'Puppet User1',
+        home    => '/home/user1/',
+        shell   =>  '/bin/bash',
+        managehome => true,
+    }
+
+    ssh_authorized_key {'puppetmaster-user1-pub-key':
+        user => 'user1',
+        type => 'rsa',
+        key => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA97Ib0Ecw6IXuJC0iYYKq4Y3e+mx4QF3t9LxpS/kHOs16mp9FIm3BP2TBumhpY8UpmxRnhymoDU7sFaC5IaUv7qU9uTNmQRAx5QDayWgpIynmXeHZc1nVM2+TX+pxJgSK867izh3FfcTaO4iY79/sv6k14ii5GebLMKh17tFmmMwtzLtdW6lmiaCXTJYLq1Cev93l4W0OutlNW/85+aZ5HWj5o4Z3/i4HSKY913ku40r3d2xJQ8dfi556I/Rfowi6mXYu2BPy33EhFMDXZHliSzJNQGtHehTsFZGMFxK7pyVVr+HS38D/G+3MwTaGzfRnCti/Ufg+vAES8N1fXdkGww==',
+    }
+
+    ssh_authorized_key {'foxriver-user1-pub-key':
+        user => 'user1',
+        type => 'rsa',
+        key => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC+C+cSSuDZ7NHEOgQCwp7SGaaUEGyp5jLcP0tckD+uEBfuxWeE6HVHXoxp5ZRMUOo8UQg2C2KhvQ79mHqss3h3urozpasKphZHh2szCn0R6xJNtXL+r9P9/eVE5PCaQ/AJY+gYfK8KAJA4zePomSWegRlK8wAptHLTuxM6y6zjdI3DFgbAbQNFI28u7h5q2f7D3VbWXxFhMBfLWT1roJUOd6P/kRIYmjpOY5peTgG98xaywp0W0LwNshHVLwRU50VI3ogoiSBg8aIVGF1JQ5M52yM+Okc9Qxrcgjh8D2rgVxoNZmrRMIWDTImePcRe8PyJ+h8YYymyTesJ8b12kqqB',
+    }
 }
+

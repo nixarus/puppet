@@ -1,0 +1,6 @@
+Port 22
+Protocol 2
+PermitRootLogin no
+AllowUsers user1
+PasswordAuthentication yes
+UsePAM yes
