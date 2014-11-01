@@ -1,6 +1,6 @@
-Port 22
+Port 22000
 Protocol 2
 PermitRootLogin no
 AllowUsers user1
-PasswordAuthentication yes
+PasswordAuthentication no
 UsePAM yes
