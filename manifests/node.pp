@@ -6,6 +6,7 @@ class base {
 
 node 'agent0.virtual.vm' {
     include base
+    include user-backup
 }
 
 node 'agent1.virtual.vm' {
