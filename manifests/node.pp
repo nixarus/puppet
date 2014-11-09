@@ -1,5 +1,6 @@
 class base {
     include ssh
+    include ntp
     include user-redhat
     include user-admin
 }
